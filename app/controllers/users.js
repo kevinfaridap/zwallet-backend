@@ -3,18 +3,74 @@ const helpers = require('../helpers/helper')
 const hashPassword = require('../helpers/hashPassword')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+// const mail = require('../helpers/sendEmail')
 
-exports.getUser = (req, res) => {
-  userModels.getUsers()
+// test kirim email
+// exports.email = async (req, res) =>{
+//   const resEmail = await mail.send()
+//   console.log(resEmail);
+// }
+
+
+
+exports.getUser = async (req, res) => {
+  const by = req.query.by || 'id'
+  const order = req.query.order || 'ASC'
+  const searchUser = req.query.firstname || ''
+  const limit = parseInt(req.query.limit) || 5
+  const page = parseInt(req.query.page) || 1
+  
+  const countUsers = await userModels.countUsers()
+  // console.log(req.query.limit);
+  // console.log(req.query.firstName);
+  const totalData = countUsers[0].totalData
+  const totalPage = Math.ceil(totalData / limit)
+  const offset = (page - 1) * limit
+
+  
+  userModels.getUsers(searchUser, offset, limit, by, order)
+
     .then((result) => {
-      res.json({
-        data: result
-      })
+      if (result.length > 0) {
+        // const dataUser = result
+        // console.log(dataUser);
+
+        res.json({
+          message: 'Success',
+          status: 200,
+          currentPage: page,
+          totalPage: totalPage,
+          totalUsers: totalData,
+          MaxperPage: limit,
+          data: result
+        })
+      } else {
+        res.json({
+          err: 'Data not found',
+          status: 400
+        })
+      }
     })
     .catch((err) => {
-      console.log(err)
+      res.json({
+        err: err + 'Error Cant Get Data',
+        status: 400
+      })
     })
 }
+
+
+// exports.getUser = (req, res) => {
+//   userModels.getUsers()
+//     .then((result) => {
+//       res.json({
+//         data: result
+//       })
+//     })
+//     .catch((err) => {
+//       console.log(err)
+//     })
+// }
 
 exports.getUserById = (req, res) => {
   const idUser = req.params.idUser
@@ -34,6 +90,29 @@ exports.getUserById = (req, res) => {
       }
     })
 }
+
+exports.getProfile = (req, res) => {
+  // const idUser = req.params.idUser
+  // email disini req.email dari decode token
+  const email = req.email
+  userModels.getUserByEmail(email)
+    .then((result) => {
+      if (result.length > 0) {
+        res.json({
+          message: `Succes get data id: ${email} `,
+          status: 200,
+          data: result
+        })
+      } else {
+        res.json({
+          message: 'Id not found !',
+          status: 500
+        })
+      }
+    })
+}
+
+
 
 exports.insertUser = (req, res) => {
   const { firstName, lastName, email, phoneNumber } = req.body
@@ -59,7 +138,7 @@ exports.insertUser = (req, res) => {
 // hash passowrd
 exports.registerUser = async (req, res) => {
   try {
-    const { email, password, phoneNumber } = req.body
+    const { email, password, firstName } = req.body
     const result = await userModels.findUser(email)
 
     if (result.length !== 0) {
@@ -68,10 +147,11 @@ exports.registerUser = async (req, res) => {
     const data = {
       email,
       password: await hashPassword.hashPassword(password),
-      firstName: '',
+      firstName,
       lastName: '',
-      phoneNumber,
+      phoneNumber: '',
       saldo: 10000,
+      pin: 123456,
       role: 2,
       active: false,
       image: '',
@@ -100,7 +180,7 @@ exports.loginUser = async (req, res) => {
     delete user.password
 
     // Cek email
-    const payload = { email: user.email, firstName: user.firstName, lastName: user.lastName, role: user.role }
+    const payload = { email: user.email, firstName: user.firstName, lastName: user.lastName, role: user.role, saldo: user.saldo }
     jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1h' }, function (err, token) {
       user.token = token
       return helpers.response(res, user, 200, null)
@@ -140,6 +220,7 @@ exports.updateUser = (req, res) => {
       console.log(err)
     })
 }
+
 
 exports.deleteUser = (req, res) => {
   const idUser = req.params.idUser

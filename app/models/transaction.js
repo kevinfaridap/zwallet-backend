@@ -150,11 +150,31 @@ exports.receiverTransfer = (id) => {
 
 
 
+exports.getTransactionsById = (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT * FROM transactions WHERE id= ?', id, (err, result) => {
+        if (!err) {
+          resolve(result)
+        } else {
+          reject(err)
+        }
+      })
+    })
+  }
 
 
-
-
-
+  
+  exports.getReceivers = (idreceiver) => {
+    return new Promise((resolve, reject) => {
+      connection.query(`SELECT firstName, phoneNumber FROM users WHERE id = ${idreceiver}`, (err, result) => {
+        if (!err) {
+          resolve(result)
+        } else {
+          reject(err)
+        }
+      })
+    })
+  }
 
 
 // const transaction = {

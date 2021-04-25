@@ -24,8 +24,9 @@ const verifyAccess = (req, res, next) => {
         })
       }
     }
+    
     // U/ kirim email ke controller
-    // req.email = decoded.email
+    req.email = decoded.email
     next()
     // console.log(decoded);
   })

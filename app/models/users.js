@@ -1,9 +1,49 @@
 const connection = require('../configs/db')
 
 const user = {
-  getUsers: () => {
+
+  countUsers: () => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM users', (err, result) => {
+      connection.query('SELECT COUNT(*) AS totalData FROM users ', (err, result) => {
+        if (err) {
+          reject(new Error('Internal server error'))
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  },
+
+
+  getUsers: (firstname, offset, limit, by, order) => {
+    return new Promise((resolve, reject) => {
+      connection.query(`SELECT * FROM users WHERE firstName LIKE '%${firstname}%' ORDER BY ${by} ${order} LIMIT ${limit} OFFSET ${offset}`, (err, result) => {
+        if (!err) {
+          // console.log(result);
+          resolve(result)
+        } else {
+          reject(err)
+        }
+      })
+    })
+  },
+
+  // Tambah pagi+sort diatas
+  // getUsers: () => {
+  //   return new Promise((resolve, reject) => {
+  //     connection.query('SELECT * FROM users', (err, result) => {
+  //       if (!err) {
+  //         resolve(result)
+  //       } else {
+  //         reject(err)
+  //       }
+  //     })
+  //   })
+  // },
+
+  getUserById: (idUser) => {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT * FROM users WHERE id= ?', idUser, (err, result) => {
         if (!err) {
           resolve(result)
         } else {
@@ -13,9 +53,9 @@ const user = {
     })
   },
 
-  getUserById: (idUser) => {
+  getUserByEmail: (email) => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM users WHERE id= ?', idUser, (err, result) => {
+      connection.query('SELECT * FROM users WHERE email= ?', email, (err, result) => {
         if (!err) {
           resolve(result)
         } else {
@@ -86,6 +126,8 @@ const user = {
       })
     })
   },
+
+
 
   deleteUser: (idUser) => {
     return new Promise((resolve, reject) => {

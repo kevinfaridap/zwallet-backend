@@ -14,5 +14,6 @@ router
     // .get("/")
     .post("/topup", transactionController.createTopUp)
     .post("/transfer", transactionController.createTransfer)
-
+    .get("/receiver/:idreceiver", transactionController.getReceiver)
+    .get("/:id", transactionController.getTransactionById)
 module.exports = router

@@ -1,10 +1,12 @@
 const transactionModels = require('../models/transaction')
 const userModels = require('../models/users')
 const helper = require('../helpers/helper')
+const { v4: uuidv4 } = require('uuid');
 
 exports.createTopUp = async (req, res) => {
     const { idUser, amount, info } = req.body;
     const data = {
+        id: uuidv4(),
         idUser,
         idReceiver: idUser,
         amount,
@@ -14,7 +16,7 @@ exports.createTopUp = async (req, res) => {
     };
     transactionModels.createTopup(data, idUser)
         .then((result) => {
-            return helper.response( res, {message: `Success Top Up = Rp ${amount}`}, 200, null );
+            return helper.response( res, data, 200, null );
         })
         .catch((err) => {
             return helper.response(res, null, 500, { message: err.message });
@@ -25,6 +27,7 @@ exports.createTopUp = async (req, res) => {
 exports.createTransfer = async (req, res) => {
     const { idUser, idReceiver, amount, info, pin } = req.body;
     const data = {
+        id: uuidv4(),
         idUser,
         idReceiver,
         amount,
@@ -51,12 +54,56 @@ exports.createTransfer = async (req, res) => {
             }
             await transactionModels.transferIdUser(idUser);
             await transactionModels.receiverTransfer(idReceiver);
-            helper.response( res, {message: `"Success transfer to ${idReceiver} sebesar ${amount}"`}, 200, null);
+            helper.response( res, data, 200, null);
+            
+            // const getNewestData = await transactionModels.getDataById(data.id)
+            // if (getNewestData.length !== 0){
+            // }
         }
     } catch (err) {
         console.log(err);
         helper.response(res, null, 200, { message: "erorr"});
     }
 };
+
+
+exports.getTransactionById = (req, res) => {
+    const idTransaction = req.params.id
+    transactionModels.getTransactionsById(idTransaction)
+      .then((result) => {
+        if (result.length > 0) {
+          res.json({
+            message: `Succes get data id: ${idTransaction}`,
+            status: 200,
+            data: result
+          })
+        } else {
+          res.json({
+            message: 'Id not found !',
+            status: 500
+          })
+        }
+      })
+  }
+
+
+  exports.getReceiver = (req, res) => {
+    const idreceiver = req.params.idreceiver
+    transactionModels.getReceivers(idreceiver)
+      .then((result) => {
+        if (result.length > 0) {
+          res.json({
+            message: `Succes get data id: ${idreceiver}`,
+            status: 200,
+            data: result
+          })
+        } else {
+          res.json({
+            message: 'Id not found !',
+            status: 500
+          })
+        }
+      })
+  }
 
 
