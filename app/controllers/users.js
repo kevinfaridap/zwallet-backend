@@ -3,6 +3,7 @@ const helpers = require('../helpers/helper')
 const hashPassword = require('../helpers/hashPassword')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const user = require('../models/users')
 // const mail = require('../helpers/sendEmail')
 
 // test kirim email
@@ -220,6 +221,61 @@ exports.updateUser = (req, res) => {
       console.log(err)
     })
 }
+
+exports.updatePin = async (req, res) => {
+  // const id = req.params.idUser
+  const {idUser, pin, newpin } = req.body
+
+  const data = {
+    idUser,
+    pin,
+    newpin
+  };
+  try {
+    const checkPin = await userModels.checkPins(idUser, pin)
+    if (checkPin < 1) {
+      helpers.response(res, null, 200, { message: "Incorect pin" })
+      return;
+    } 
+    await userModels.updatePins(newpin, idUser);
+    helpers.response( res, data, 200, null);
+    } catch (err) {
+    console.log(err);
+    helpers.response(res, null, 200, { message: "erorr"});
+  }
+}
+
+exports.updatePassword = async (req, res) => {
+  // const id = req.params.idUser
+  const {idUser, password, newpassword } = req.body
+
+  const data = await hashPassword.hashPassword(newpassword);
+  
+  try {
+    const checkPassword = await userModels.checkPasswords(idUser)
+    // console.log(checkPassword);
+    if (checkPassword < 1) {
+      helpers.response(res, null, 200, { message: "Check Id User" })
+      return;
+  } 
+    // console.log(checkPassword[0].password);
+    const passHash = checkPassword[0].password;
+    const isValid = await bcrypt.compare(password, passHash)
+    // console.log(password);
+    if (!isValid) {
+      return helpers.response(res, null, 200, { message: 'Check Your Password' })
+    }
+    // console.log(data.newpassword);
+    await userModels.updatePasswords(data, idUser);
+    helpers.response( res, data, 200, null);
+    } catch (err) {
+    console.log(err);
+    helpers.response(res, null, 200, { message: "erorr"});
+  }
+}
+
+
+
 
 
 exports.deleteUser = (req, res) => {

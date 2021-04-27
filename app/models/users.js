@@ -114,6 +114,63 @@ const user = {
     })
   },
 
+  checkPins: (idUser, pin) => {
+      return new Promise((resolve, reject) => {
+          connection.query(
+              `SELECT pin from users WHERE id=${idUser} and pin=${pin}`,
+              (err, result) => {
+                  if (!err) {
+                      resolve(result);
+                  } else {
+                      reject(new Error(err));
+                  }
+              }
+          );
+      });
+  },
+
+
+  updatePins: (newpin, idUser) => {
+    return new Promise((resolve, reject) => {
+      connection.query(`UPDATE users SET pin=${newpin} WHERE id = ${idUser}`, (err, result) => {
+        if (!err) {
+          resolve(result)
+        } else {
+          reject(err)
+        }
+      })
+    })
+  },
+
+  checkPasswords: (idUser) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            `SELECT password from users WHERE id=${idUser}`,
+            (err, result) => {
+                if (!err) {
+                    resolve(result);
+                } else {
+                    reject(new Error(err));
+                }
+            }
+        );
+    });
+},
+
+
+updatePasswords: (data, idUser) => {
+  return new Promise((resolve, reject) => {
+    // connection.query(`UPDATE users SET password=${data} WHERE id = ${idUser}`, (err, result) => {
+      connection.query(`UPDATE users SET password = ? WHERE id = ?`,[data, idUser], (err, result) => {
+      if (!err) {
+        resolve(result)
+      } else {
+        reject(err)
+      }
+    })
+  })
+},
+
 
   updateUser: (idUser, data) => {
     return new Promise((resolve, reject) => {

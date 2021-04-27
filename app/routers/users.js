@@ -21,7 +21,10 @@ router
   
   // auth dan role dimatikan sementara untuk front end
   // .put('/:idUser', auth.verifyAccess, verifyrole.verify(), userController.updateUser)
-  .put('/:idUser', userController.updateUser)
+
+  .put('/updatepin', userController.updatePin)
+  .put('/changepassword', userController.updatePassword)
+  // .put('/:idUser', userController.updateUser)
 
   .delete('/:idUser', auth.verifyAccess, verifyrole.verify(), userController.deleteUser)
 
