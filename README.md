@@ -44,6 +44,6 @@ DB = yourdatabase
 
 ># Visit Project
 * Frontend :https://github.com/kevinfaridap/zwallet-frontend
-* Demo App :
+* Demo App :https://zwallet-frontend.vercel.app/auth/signin
 
 
