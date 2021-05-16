@@ -90,6 +90,19 @@ const user = {
     })
   },
 
+  verifyUsers: (email) => {
+    return new Promise((resolve, reject) => {
+      connection.query("UPDATE users SET active = true WHERE email = ?", email, (err, result) => {
+        if (!err) {
+          resolve(result)
+        } else {
+          reject(err)
+        }
+      })
+    })
+  },
+  
+
   findUser: (email) => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * from users WHERE email = ?', email, (err, result) => {

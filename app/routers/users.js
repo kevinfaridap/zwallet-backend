@@ -16,8 +16,10 @@ router
   .post('/', auth.verifyAccess, verifyrole.verify(), userController.insertUser)
   .post('/register', userController.registerUser)
   .post('/login', userController.loginUser)
-  
-  // .post('/tryemail', userController.email)
+  .put('/verify', userController.verifyUser)
+
+
+  .post('/tryemail', userController.email)
   
   // auth dan role dimatikan sementara untuk front end
   // .put('/:idUser', auth.verifyAccess, verifyrole.verify(), userController.updateUser)

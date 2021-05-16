@@ -4,13 +4,13 @@ const hashPassword = require('../helpers/hashPassword')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const user = require('../models/users')
-// const mail = require('../helpers/sendEmail')
+const mail = require('../helpers/sendEmail')
 
 // test kirim email
-// exports.email = async (req, res) =>{
-//   const resEmail = await mail.send()
-//   console.log(resEmail);
-// }
+exports.email = async (req, res)=>{
+  const resEmail = await mail.send()
+  console.log(resEmail);
+}
 
 
 
@@ -158,9 +158,11 @@ exports.registerUser = async (req, res) => {
       image: '',
     }
     const resultInsert = await userModels.insertUser(data)
+    await mail.send(data.email, "verify");
 
     return helpers.response(res, data, 401, null)
   } catch (error) {
+    console.log(error)
     return helpers.response(res, null, 500, { message: 'Internal Server Error' })
   }
 }
@@ -173,8 +175,13 @@ exports.loginUser = async (req, res) => {
       return helpers.response(res, null, 200, { message: 'Email or Password is not registered' })
     }
     const user = result[0];
+    
+    // Jika mau pake verify email
+    const isVerify = user.active
+    if(isVerify == false){
+      return helpers.response(res, null, 200, { message: 'Verify Your Email To Signin' })
+    } 
     const isValid = await bcrypt.compare(password, user.password)
-    // console.log(isValid);
     if (!isValid) {
       return helpers.response(res, null, 200, { message: 'Email or Password is incorrect' })
     }
@@ -187,10 +194,55 @@ exports.loginUser = async (req, res) => {
       return helpers.response(res, user, 200, null)
     })
   } catch (error) {
-   
+    
     return helpers.response(res, null, 500, { message: 'Internal Server Error' })
   }
 }
+
+exports.verifyUser = async (req, res) => {
+  try {
+    const {email} = req.body
+    console.log(email);
+
+    const result = await userModels.findUser(email)
+    if (result.length === 0) {
+      return helpers.response(res, null, 200, { message: 'Email is not registered' })
+    }
+    const user = result[0];
+    // console.log(user);
+    if (user.active === 1) {
+      return helpers.response(res, null, 500, { message: 'Email is activated' })
+    } else {
+      
+      await userModels.verifyUsers(user.email)
+      .then((result) => {
+        if (result.changedRows !== 0) {
+          res.json({
+            message: 'Succes Verify Email',
+            status: 200,
+          })
+        } else {
+          res.json({
+            message: 'Email not found !',
+            status: 500
+          })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    }
+
+  } catch (err) {
+    console.log(err);
+    return helpers.response(res, null, 500, { message: err.message })
+  }
+  
+  
+}
+
+
+
 
 exports.updateUser = (req, res) => {
   const idUser = req.params.idUser
