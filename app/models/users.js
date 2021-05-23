@@ -142,6 +142,47 @@ const user = {
       });
   },
 
+  checkUsers: (idUser) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            `SELECT image from users WHERE id=${idUser}`,
+            (err, result) => {
+                if (!err) {
+                    resolve(result);
+                } else {
+                    reject(new Error(err));
+                }
+            }
+        );
+    });
+},
+
+
+updateImgs:(data, idUser) => {
+  return new Promise((resolve, reject) => {
+    console.log(data.image, idUser);
+    connection.query(`UPDATE users SET image='${data.image}' WHERE id='${idUser}'`, (err, result) => {
+      if (!err) {
+        resolve(result)
+      } else {
+        reject(err)
+      }
+    })
+  })
+},
+
+// updateImages: (data, idUser) => {
+//   return new Promise((resolve, reject) => {
+//     connection.query(`UPDATE users SET image='${data.image}' WHERE id = ${idUser}`, (err, result) => {
+//       if (!err) {
+//         resolve(result)
+//       } else {
+//         reject(err)
+//       }
+//     })
+//   })
+// },
+
 
   updatePins: (newpin, idUser) => {
     return new Promise((resolve, reject) => {
@@ -184,10 +225,12 @@ updatePasswords: (data, idUser) => {
   })
 },
 
-
-  updateUser: (idUser, data) => {
+  
+  updateUsers: (data, idUser) => {
     return new Promise((resolve, reject) => {
-      connection.query('UPDATE users SET ? WHERE id=?', [data, idUser], (err, result) => {
+      // UPDATE users SET firstName ='Daniel' ,lastName = 'cormier' WHERE id = 10
+      // console.log(idUser, 'iduser');
+      connection.query(`UPDATE users SET firstName ='${data.firstName}' ,lastName='${data.lastName}' WHERE id=${idUser}`, (err, result) => {
         if (!err) {
           resolve(result)
         } else {

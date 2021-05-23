@@ -22,7 +22,9 @@ const send = (destination, type) => {
           from: email,
           to: destination,
           subject: "Account Verification",
-          html: `Click this link to verify your account : <a href="${link}/auth/${destination}">Activate</a>`,
+          html: `Your default pin: 123456.
+          Dont forget to change your pin after verify !!
+          Click this link to verify your account : <a href="${link}/auth/${destination}">Activate</a>`,
         });
         resolve(info);
       } else if (type === "forgot") {

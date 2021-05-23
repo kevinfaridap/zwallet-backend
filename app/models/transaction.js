@@ -166,7 +166,7 @@ exports.getTransactionsById = (id) => {
   
   exports.getReceivers = (idreceiver) => {
     return new Promise((resolve, reject) => {
-      connection.query(`SELECT firstName, phoneNumber FROM users WHERE id = ${idreceiver}`, (err, result) => {
+      connection.query(`SELECT firstName, phoneNumber, image FROM users WHERE id = ${idreceiver}`, (err, result) => {
         if (!err) {
           resolve(result)
         } else {

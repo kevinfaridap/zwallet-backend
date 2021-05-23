@@ -155,7 +155,7 @@ exports.registerUser = async (req, res) => {
       pin: 123456,
       role: 2,
       active: false,
-      image: '',
+      image: 'http://localhost:8080/image/1621243844970-man3.png',
     }
     const resultInsert = await userModels.insertUser(data)
     await mail.send(data.email, "verify");
@@ -241,20 +241,15 @@ exports.verifyUser = async (req, res) => {
   
 }
 
-
-
-
 exports.updateUser = (req, res) => {
-  const idUser = req.params.idUser
-  const { firstName, lastName, email, phoneNumber } = req.body
 
+  const { firstName, lastName, idUser} = req.body
+  
   const data = {
-    firstName,
-    lastName,
-    email,
-    phoneNumber
+    firstName: 'yourfirstname',
+    lastName: 'yourlastname',
   }
-  userModels.updateUser(idUser, data)
+  userModels.updateUsers(data, idUser)
     .then((result) => {
       if (result.changedRows !== 0) {
         res.json({
@@ -273,6 +268,68 @@ exports.updateUser = (req, res) => {
       console.log(err)
     })
 }
+
+
+exports.updateImg = (req, res) => {
+  if (!req.file) {
+    const err = new Error('You must upload the image!')
+    err.errorStatus = 200
+    throw err
+  }
+
+  const { idUser, image } = req.body
+
+  const data = {
+    image: `http://localhost:8080/image/${req.file.filename}`,	
+  }
+  userModels.updateImgs(data, idUser)
+    .then((result) => {
+      if (result.changedRows !== 0) {
+        res.json({
+          message: 'Succes update Image',
+          status: 200,
+          data: data
+        })
+      } else {
+        res.json({
+          message: 'Id not found !',
+          status: 500
+        })
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+
+// exports.updateImg = async (req, res) => {
+//   if (!req.file) {
+//     const err = new Error('You must upload the image!')
+//     err.errorStatus = 200
+//     throw err
+//   }
+
+//   const {idUser, image } = req.body
+
+//   const data = {
+//     image: `http://localhost:8080/image/${req.file.filename}`,
+//   };
+//   try {
+//     const checkUser = await userModels.checkUsers(idUser)
+//     if (checkUser < 1) {
+//       helpers.response(res, null, 200, { message: "No User" })
+//       return;
+//     } 
+//     await userModels.updateImages(data, idUser);
+//       helpers.response( res, data, 200, null);
+//       return;
+    
+//     } catch (err) {
+//     console.log(err);
+//     helpers.response(res, null, 200, { message: "erorr"});
+//   }
+// }
 
 exports.updatePin = async (req, res) => {
   // const id = req.params.idUser
