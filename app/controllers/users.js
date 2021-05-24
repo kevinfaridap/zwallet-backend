@@ -155,7 +155,7 @@ exports.registerUser = async (req, res) => {
       pin: 123456,
       role: 2,
       active: false,
-      image: 'http://localhost:8080/image/1621243844970-man3.png',
+      image: 'http://localhost:8080/image/1621856460690-default-image.png',
     }
     const resultInsert = await userModels.insertUser(data)
     await mail.send(data.email, "verify");
@@ -246,8 +246,8 @@ exports.updateUser = (req, res) => {
   const { firstName, lastName, idUser} = req.body
   
   const data = {
-    firstName: 'yourfirstname',
-    lastName: 'yourlastname',
+    firstName,
+    lastName,
   }
   userModels.updateUsers(data, idUser)
     .then((result) => {
@@ -269,6 +269,63 @@ exports.updateUser = (req, res) => {
     })
 }
 
+// UpdatePhone
+exports.UpdatePhone = (req, res) => {
+
+  const { idUser, phoneNumber} = req.body
+  
+  const data = {
+    phoneNumber,
+  }
+  userModels.updatePhones(data, idUser)
+    .then((result) => {
+      // console.log(result);
+      if (result.changedRows !== 0) {
+        res.json({
+          message: 'Succes update data',
+          status: 200,
+          data: data
+        })
+      } else {
+        res.json({
+          message: 'Id not found !',
+          status: 500
+        })
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+// RemovePhone
+exports.RemovePhone = (req, res) => {
+
+  const { idUser, phoneNumber} = req.body
+  
+  const data = {
+    phoneNumber: '',
+  }
+  userModels.RemovePhones(data, idUser)
+    .then((result) => {
+      // console.log(result);
+      if (result.changedRows !== 0) {
+        res.json({
+          message: 'Succes Remove Phone',
+          status: 200,
+          data: data
+        })
+      } else {
+        res.json({
+          message: 'Id not found !',
+          status: 500
+        })
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
 
 exports.updateImg = (req, res) => {
   if (!req.file) {

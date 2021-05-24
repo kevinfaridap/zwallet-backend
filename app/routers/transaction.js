@@ -12,6 +12,7 @@ router
 //   .delete('/:id', transactionController.deleteTransaction)
     
     // .get("/")
+    .get('/history/transaction/:idsender', transactionController.getTransaction)
     .post("/topup", transactionController.createTopUp)
     .post("/transfer", transactionController.createTransfer)
     .get("/receiver/:idreceiver", transactionController.getReceiver)

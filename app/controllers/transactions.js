@@ -2,6 +2,8 @@ const transactionModels = require('../models/transaction')
 const userModels = require('../models/users')
 const helper = require('../helpers/helper')
 const { v4: uuidv4 } = require('uuid');
+const moment = require('moment')
+moment.locale('id');
 
 exports.createTopUp = async (req, res) => {
     const { idUser, amount, info } = req.body;
@@ -10,7 +12,7 @@ exports.createTopUp = async (req, res) => {
         idUser,
         idReceiver: idUser,
         amount,
-        type: "topup",
+        type: "Topup",
         info,
         status: "success"
     };
@@ -26,14 +28,17 @@ exports.createTopUp = async (req, res) => {
 
 exports.createTransfer = async (req, res) => {
     const { idUser, idReceiver, amount, info, pin } = req.body;
+    const dateNow = new Date()
+    const dateFormated = moment(dateNow).format('LLL');;
     const data = {
         id: uuidv4(),
         idUser,
         idReceiver,
         amount,
-        type: "transfer",
+        type: "Transfer",
         info,
-        status: "pending"
+        status: "pending",
+        dateFormated: dateFormated
     };
     try {
         const user = await userModels.findUserTransaction(idReceiver)
@@ -94,6 +99,25 @@ exports.getTransactionById = (req, res) => {
         if (result.length > 0) {
           res.json({
             message: `Succes get data id: ${idreceiver}`,
+            status: 200,
+            data: result
+          })
+        } else {
+          res.json({
+            message: 'Id not found !',
+            status: 500
+          })
+        }
+      })
+  }
+  
+  exports.getTransaction = (req, res) => {
+    const idsender = req.params.idsender
+    transactionModels.getTransactions(idsender)
+      .then((result) => {
+        if (result.length > 0) {
+          res.json({
+            message: `Succes get data id: ${idsender}`,
             status: 200,
             data: result
           })

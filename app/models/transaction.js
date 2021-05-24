@@ -177,6 +177,22 @@ exports.getTransactionsById = (id) => {
   }
 
 
+//   SELECT * FROM `transactions` WHERE idUser=11 ORDER BY `transactions`.`createdAt` DESC LIMIT 0,4
+  exports.getTransactions = (idsender) => {
+    return new Promise((resolve, reject) => {
+        // `SELECT transactions.id, transactions.idUser, transactions.idReceiver, transactions.amount, transactions.createdAt, transactions.type, users.firstName, users.phoneNumber FROM transactions INNER JOIN users ON transactions.idReceiver = users.id WHERE transactions.idUser = 48 ORDER BY transactions.createdAt DESC LIMIT 0,4`
+        // connection.query(`SELECT * FROM transactions WHERE idUser = ${idsender} ORDER BY createdAt DESC LIMIT 0,4`, (err, result) => {
+            connection.query(`SELECT transactions.id, transactions.idUser, transactions.idReceiver, transactions.amount, transactions.createdAt, transactions.type, users.firstName, users.phoneNumber, users.image FROM transactions INNER JOIN users ON transactions.idReceiver = users.id WHERE transactions.idUser = ${idsender} ORDER BY transactions.createdAt DESC LIMIT 0,4`, (err, result) => {
+        if (!err) {
+          resolve(result)
+        } else {
+          reject(err)
+        }
+      })
+    })
+  }
+
+
 // const transaction = {
 
 

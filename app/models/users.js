@@ -240,6 +240,33 @@ updatePasswords: (data, idUser) => {
     })
   },
 
+  // updatePhones
+  updatePhones: (data, idUser) => {
+    return new Promise((resolve, reject) => {
+      // console.log(data.phoneNumber, 'number' , idUser)
+      connection.query(`UPDATE users SET phoneNumber ='${data.phoneNumber}' WHERE id=${idUser}`, (err, result) => {
+        if (!err) {
+          resolve(result)
+        } else {
+          reject(err)
+        }
+      })
+    })
+  },
+
+  // RemovePhones
+  RemovePhones: (data, idUser) => {
+    return new Promise((resolve, reject) => {
+      console.log(data.phoneNumber, 'number' , idUser)
+      connection.query(`UPDATE users SET phoneNumber ='${data.phoneNumber}' WHERE id=${idUser}`, (err, result) => {
+        if (!err) {
+          resolve(result)
+        } else {
+          reject(err)
+        }
+      })
+    })
+  },
 
 
   deleteUser: (idUser) => {

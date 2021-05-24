@@ -27,6 +27,8 @@ router
 
   .put('/updateimage',uploadMulter.single('image'), userController.updateImg)
   .put('/updatepin', userController.updatePin)
+  .put('/updatephone', userController.UpdatePhone)
+  .put('/removephone', userController.RemovePhone)
   .put('/changepassword', userController.updatePassword)
   .put('/updateprofile', userController.updateUser)
 
