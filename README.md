@@ -1,16 +1,16 @@
 <h3 align="center">Zwallet Api</h3>
   <p align="center">
-   <img src="https://miro.medium.com/max/365/1*d2zLEjERsrs1Rzk_95QU9A.png" style="margin-left: auto; margin-right: auto;" />
+   <img src="https://user-images.githubusercontent.com/74039235/119271100-4065e500-bc2a-11eb-8635-b8ecd44f58be.png" style="margin-left: auto; margin-right: auto;" />
   </p>
   <p align="center">
-   This Api is for Zwallet. application and payment services in the form of            electronic money, electronic wallet, transfer, and other support services
+   This Api is for Zwallet. application and payment services in the form of electronic money, electronic wallet, transfer, and other support services
   </p>
 
 
 
 ## Built With
-* [Node.js](https://nodejs.org/en/)
-* [Express.js](https://expressjs.com/)
+* [NodeJs](https://nodejs.org/en/)
+* [ExpressJs](https://expressjs.com/)
 * **JWT** for Authentication
 * **Nodemailer** for Mailer
 * **Multer** for Upload file
@@ -75,6 +75,6 @@ Please make sure to update tests as appropriate.
 
 ># Visit Project
 - :white_check_mark: [Frontend](https://github.com/kevinfaridap/zwallet-frontend)
-- :rocket: [Zwallet](https://zwallet-frontend.vercel.app/auth/signin)
+- :rocket: [Zwallet [Demo Aplikasi]](https://zwallet-frontend.vercel.app/auth/signin)
 
 
