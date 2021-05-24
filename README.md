@@ -9,7 +9,7 @@
 
 
 ## Built With
-* [Node.js](https://nodejs.org/en/)
+* [NodeJs](https://nodejs.org/en/)
 * [ExpressJs](https://expressjs.com/)
 * **JWT** for Authentication
 * **Nodemailer** for Mailer
@@ -75,6 +75,6 @@ Please make sure to update tests as appropriate.
 
 ># Visit Project
 - :white_check_mark: [Frontend](https://github.com/kevinfaridap/zwallet-frontend)
-- :rocket: [Zwallet](https://zwallet-frontend.vercel.app/auth/signin)
+- :rocket: [Zwallet [Demo Aplikasi]](https://zwallet-frontend.vercel.app/auth/signin)
 
 
