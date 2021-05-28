@@ -3,7 +3,7 @@
    <img src="https://user-images.githubusercontent.com/74039235/119271100-4065e500-bc2a-11eb-8635-b8ecd44f58be.png" style="margin-left: auto; margin-right: auto;" />
   </p>
   <p align="center">
-   This Api is for Zwallet. application and payment services in the form of electronic money, electronic wallet, transfer, and other support services
+   This Api is for Zwallet. application and payment services in the form of electronic money, electronic wallet, transfer, and other support services.
   </p>
 
 
@@ -75,6 +75,6 @@ Please make sure to update tests as appropriate.
 
 ># Visit Project
 - :white_check_mark: [Frontend](https://github.com/kevinfaridap/zwallet-frontend)
-- :rocket: [Zwallet [Demo Aplikasi]](https://zwallet-frontend.vercel.app/auth/signin)
+- :rocket: [Zwallet [Demo Application]](https://zwallet-frontend.vercel.app/auth/signin)
 
 
