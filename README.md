@@ -22,6 +22,36 @@
 * [Database](database-example.sql)
 
 
+
+#### User Endpoint
+
+|  METHOD  |             API             |                    REMARKS                    |
+| :------: | :-------------------------: | :-------------------------------------------: |
+|  `GET`   |           /users/           |                 Get All User                  |
+|  `GET`   |        /users/profile       |      Get User's Profile by Decode Email       |
+|  `GET`   |         /users/:id          |                Get User by Id                 |
+|  `POST`  |       /users/register       |        Creat Account and Verify Activation    |
+|  `POST`  |         /users/login        |            Login Activated Account            |
+|  `PUT`   |         /users/verify       |              Verify User's Account            |
+|  `PUT`   |      /users/updateimage     |               Update User's Image             |
+|  `PUT`   |       /users/updatepin      |                Update User's Pin              |
+|  `PUT`   |      /users/removephone     |          Update User's Phone to null          |
+|  `PUT`   |    /users/changepassword    |              Update User's Password           |
+|  `PUT`   |     /users/updateprofile    |               Update User's Profile           |
+
+
+#### Transaction Endpoint
+
+|  METHOD  |             API                            |                    REMARKS                    |
+| :------: | :-------------------------:                | :-------------------------------------------: |
+|  `GET`   | /transaction/history/transaction/:idsender |    Get All History Transaction by Idsender    |
+|  `POST`  |        /transaction/topup                  |              Top Up User's Saldo              |
+|  `POST`  |        /transaction/transfer               |          Transfer Saldo to Other's User       |
+|  `GET`   |        /transaction/receiver/:idreceiver   |          Get Data Receiver by idreceiver      |
+|  `GET`   |        /transaction/:id                    |             Get Transaction by Id             |
+
+
+
 ## Installation
 
 Clone this repository and then use the package manager npm to install dependencies.
